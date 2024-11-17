@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>List</title>
+  </head>
+  <body>
+    <div class="container border" style="font-size: 1.12rem; margin-top: 1.5rem; padding: 2rem;">
+        <div class="col-12">
+            <h1 id="title" style="text-align: center;"></h1>
+        </div>
+        <div class="row">
+            <div class="col-10">
+                <input type="text" class="form-control" id="Item-input" placeholder="Do the JavaScript Assignment">
+                <div>
+                    <span class="alert alert-danger" style="display: none;" id="error-message-item"></span>
+                </div>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-primary" id="submit-btn">Submit</button>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12">
+                <ul id="todolist">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script>
+        const welcome = 'Welcome to your todo List ';
+        let title = document.getElementById('title');
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+        console.log(username);
+        function titledisplay(){
+            title.innerHTML = welcome + username;
+        }
+        titledisplay();
+
+        // TO DO LIST CODE
+        let match = false;
+        const todoarray = [];
+        let newitem = document.getElementById('Item-input');
+        let itemErrormsg = document.getElementById('error-message-item');
+        let todolistul = document.getElementById('todolist');
+
+        document.getElementById('submit-btn').addEventListener('click', function(event) {
+            event.preventDefault(); 
+            
+
+            for (let i = 0; i < todoarray.length; i++) {
+                if (newitem.value.localeCompare(todoarray[i]) == 0) {
+                    match = true;
+                    console.log('Match DETECTED!');
+                    break;
+                } 
+            }
+
+            if (!match) {
+                todoarray.push(newitem.value);
+                console.log(todoarray);
+
+
+                const todolistli = document.createElement("li");
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox"; 
+                checkbox.classList.add("form-check-input");
+                checkbox.addEventListener('change', function() {
+                    if (checkbox.checked) {
+                        todolistli.style.textDecoration = "line-through";
+                    } else {
+                        todolistli.style.textDecoration = "none"; 
+                    }
+                });
+
+                const label = document.createElement("span");
+                label.textContent = newitem.value;
+                todolistli.appendChild(checkbox);
+                todolistli.appendChild(label);
+                todolistul.appendChild(todolistli);
+                newitem.value = ''; 
+                label.classList.add("form-check-label")
+            } else {
+                itemErrormsg.innerHTML = 'Item Already Exists';
+                itemErrormsg.style.display = "block";
+            }
+
+            console.log(todoarray);
+            match = false;
+        });
+    </script>
+  </body>
+</html>
